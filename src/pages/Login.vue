@@ -27,6 +27,7 @@
 <script>
 import api from '../utils/api'
 import auth from '../utils/auth-helper'
+import md5 from 'js-md5'
 export default {
   data() {
     return {
@@ -43,7 +44,7 @@ export default {
         _self.message = "username or password can not be empty."
         return
       }
-      api.checkLogin(_self.username,_self.password) // TODO: password should be encrypted
+      api.checkLogin(_self.username, md5(_self.password))
       .then(function(data){
         if (data.loginSuccess) {
             auth.setUserInfo(data.userInfo)
