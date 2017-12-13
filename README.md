@@ -28,3 +28,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - [Javascript Library](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects)
 - [Mockjs](https://github.com/nuysoft/Mock/wiki)
 - [axios-mock-adapter](https://www.npmjs.com/package/axios-mock-adapter)
+- [Vuex](https://github.com/vuejs/vuex)

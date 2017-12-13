@@ -1,26 +1,44 @@
 <template>
   <div id="app">
+    <loading v-show="showLoading"></loading>
+    <app-header v-if="$global.isAuthenticated"></app-header>
     <div class="container">
       <div>
         <router-view/>
       </div>
     </div>
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import AppHeader from './components/Header'
+import AppFooter from './components/Footer'
+import Loading from './components/Loading'
+
 export default {
-  name: 'app'
+  name: 'app',
+  computed:{
+    ...mapGetters({
+      showLoading: 'showLoading'
+    })
+  },
+  components:{
+    AppHeader,
+    AppFooter,
+    Loading
+  }
 }
 </script>
 
 <style>
+@import url("./assets/site.css");
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

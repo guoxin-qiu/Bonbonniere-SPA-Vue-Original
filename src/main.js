@@ -5,10 +5,15 @@ import App from './App'
 import router from './router'
 import auth from './utils/auth-helper'
 import 'babel-polyfill'
+import stores from './store/index'
 require('./mock/mock-api.js')
 require('./mock/mock-database-init')
 
 Vue.config.productionTip = false
+
+Vue.prototype.$global = {
+  isAuthenticated: auth.isAuthenticated()
+}
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
@@ -31,8 +36,12 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
+  store: stores,
   template: '<App/>',
   components: {
     App
-  }
+  },
+  // watch:{
+  //   '$route': 'checkLogin'
+  // }
 })

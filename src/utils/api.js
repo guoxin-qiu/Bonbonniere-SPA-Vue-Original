@@ -6,7 +6,11 @@ function checkLogin(username, password) {
     password: password
   });
 }
+function getMenu(){
+  return Http.fetch('account/menu')
+}
 
 export default {
-  checkLogin: checkLogin
+  checkLogin: checkLogin,
+  getMenu: getMenu
 }

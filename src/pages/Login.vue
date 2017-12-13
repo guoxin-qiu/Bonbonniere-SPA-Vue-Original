@@ -50,6 +50,7 @@ export default {
             auth.setUserInfo(data.userInfo)
             let redirectUrl = decodeURIComponent(_self.$route.query.redirect || '/')
             _self.$router.push({path: redirectUrl})
+            _self.$global.isAuthenticated = true
           } else {
             _self.message = "username or password is not correct, please try again."
           }
