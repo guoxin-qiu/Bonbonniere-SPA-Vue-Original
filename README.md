@@ -29,3 +29,5 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - [Mockjs](https://github.com/nuysoft/Mock/wiki)
 - [axios-mock-adapter](https://www.npmjs.com/package/axios-mock-adapter)
 - [Vuex](https://github.com/vuejs/vuex)
+- [Sample](https://www.v2ex.com/t/372961)
+- [Sample](https://github.com/PanJiaChen/vueAdmin-template)
