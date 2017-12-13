@@ -44,7 +44,7 @@ export default {
         _self.message = "username or password can not be empty."
         return
       }
-      api.checkLogin(_self.username, md5(_self.password))
+      api.checkLogin(_self.username, md5(_self.password)) // TODO: remenberMe??
       .then(function(data){
         if (data.loginSuccess) {
             auth.setUserInfo(data.userInfo)
