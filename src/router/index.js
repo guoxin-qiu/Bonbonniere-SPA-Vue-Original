@@ -6,7 +6,7 @@ import Login from '@/pages/Login.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash',// hash, hsitroy    TODO: history with IIS
+  mode: 'history',// hash, history
   routes: [
     {
       path: '/',
