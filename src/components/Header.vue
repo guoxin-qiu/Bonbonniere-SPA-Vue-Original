@@ -22,7 +22,8 @@
 </template>
 <style>
 .navbar-inverse {
-  background-color: white;
+  background-color: #366d88;
+  border-color: #366d88;
 }
 </style>
 
