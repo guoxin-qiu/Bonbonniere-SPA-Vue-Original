@@ -35,18 +35,18 @@ function initMenu() {
   DB.Menu.deleteAll();
   DB.Menu.addRange([{
     Id: 1,
-    Text: '主页',
-    Url: './index.html',
+    Text: 'HOME',
+    Url: '/home',
     IsActive: true
   }, {
     Id: 2,
-    Text: '用户管理',
-    Url: './user.html',
+    Text: 'USER',
+    Url: '/user',
     IsActive: true
   }, {
     Id: 99,
     Text: 'API',
-    Url: './api.html',
-    IsActive: true
+    Url: '/api',
+    IsActive: false
   }]);
 }

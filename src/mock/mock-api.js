@@ -19,4 +19,4 @@ Mock.onGet('account/login').reply(function(config){
   return [200, {token: checkSuccess? uuidv1() : '', loginSuccess: checkSuccess, userInfo: user}]
 })
 
-Mock.onGet('account/menu').reply(200,DB.Menu.getAll())
+Mock.onGet('account/menu').reply(200,DB.Menu.getAll().where(menu => menu.IsActive))
