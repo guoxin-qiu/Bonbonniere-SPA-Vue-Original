@@ -1,104 +1,205 @@
 <template>
   <div>
-    <div class="col-md-4"></div>
-    <div class="input-group col-md-4" style="margin:20px 0;">
-      <input type="text" v-model="searchTextLive" @keyup.enter="search" class="form-control" placeholder="enter the keyword" />
-      <span class="input-group-btn">
-        <button class="btn btn-info btn-search" @click="search">Search</button>
-        <button class="btn btn-info" style="margin-left:3px;">＋New</button>
-      </span>
+    <div class="filter-container">
+      <div class="col-md-4"></div>
+      <div class="input-group col-md-4" style="margin:20px 0;">
+        <input type="text" v-model="listQuery.searchText" @keyup.enter="search" class="form-control" placeholder="enter the keyword" />
+        <span class="input-group-btn">
+          <button class="btn btn-info btn-search" @click="search">Search</button>
+          <button class="btn btn-info" style="margin-left:3px;" @click="handleCreate">＋New</button>
+        </span>
+      </div>
+      <div class="col-md-4"></div>
     </div>
-    <div class="col-md-4"></div>
-    <div v-if="users.length > 0" class="table-responsive col-md-12">
-      <table class="table table-hover">
-        <col style="width:30%;" />
-        <col style="width:30%;" />
-        <col style="width:30%;" />
-        <col style="width:10%;" />
-        <thead>
-          <th v-for="col in columns" :key="col" v-text="col"></th>
-          <th></th>
-        </thead>
-        <tbody>
-          <tr v-for="user in users" :key="user.id">
-            <td v-for="col in columns" :key="col" v-text="user[col]"></td>
-            <td>
-              <span class="input-group-btn">
-                <button class="btn btn-info">查看详情</button>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="4" class="text-right">
-              <pagination :cur-page-index.sync="pageIndex" :total-page-count="totalPageCount" :query-func="_query"></pagination>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+    <div class="data-container">
+      <div v-if="users.length > 0" class="table-responsive col-md-12">
+        <table class="table table-hover">
+          <col style="width:30%;" />
+          <col style="width:30%;" />
+          <col style="width:30%;" />
+          <col style="width:10%;" />
+          <thead>
+            <th v-for="col in columns" :key="col" v-text="col"></th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr v-for="user in users" :key="user.id">
+              <td v-for="col in columns" :key="col" v-text="user[col]"></td>
+              <td>
+                <span class="input-group-btn">
+                  <button @click="handleUpdate(user.id)" class="btn btn-info">Edit</button>
+                  <button @click="handleDelete(user.id)" class="btn btn-info">Delete</button>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="text-right">
+                <pagination :cur-page-index.sync="listQuery.pageIndex" :total-page-count="totalPageCount" :query-func="_query"></pagination>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div v-else class="alert">暂无数据！</div>
     </div>
-    <div v-else class="alert">暂无数据！</div>
+    <my-dialog v-if="dialogVisible" @close="dialogVisible=false">
+      <h3 slot="dialog-header">User Information</h3>
+      <div slot="dialog-body">
+        <div class="form-group" v-for="col in columns" :key="col">
+          <label class="control-label" v-text="col+':'"></label>
+          <input v-if="(dialogStatus === 'create') || (dialogStatus==='update' && col!=='username')" v-model="curUser[col]" type="text" class="form-control" />
+          <span v-else v-text="curUser[col]" class="form-control" style="background-color:#eee;"></span>
+        </div>
+      </div>
+      <div slot="dialog-footer">
+        <span class="input-group-btn">
+          <button type="button" v-show="dialogStatus==='create'" @click="createUser" class="btn btn-primary">Save</button>
+          <button type="button" v-show="dialogStatus==='update'" @click="updateUser" class="btn btn-primary">Save</button>
+          <button type="button" v-show="dialogStatus==='delete'" @click="deleteUser" class="btn btn-primary">Delete</button>
+          <button type="button" @click="dialogVisible=false" class="btn btn-primary">Cancel</button>
+        </span>
+      </div>
+    </my-dialog>
   </div>
 </template>
 
 <script>
-import Pagination from '../../components/Pagination'
-import Api from '../../utils/api'
+  import Api from '../../utils/api'
+  import Pagination from '../../components/Pagination'
+  import MyDialog from '../../components/Dialog'
 
-export default{
-  data() {
-    return {
-      columns: ['username', 'fullName', 'email'],
-      users: [],
-      curUser: {},
-      originalUser: {},
-      showModal: false,
-      isNew: false,
-      isEditing: false,
+  export default {
+    data() {
+      return {
+        columns: ['username', 'fullName', 'email'],
+        users: [],
+        listQuery: {
+          searchText: '',
+          pageSize: 2,
+          pageIndex: 1
+        },
+        totalPageCount: 1,
 
-      searchText: '',
-      searchTextLive: '',
-      totalPageCount: 1,
-      pageSize: 2,
-      pageIndex: 1
-    }
-  },
-  components: {
-    Pagination
-  },
-  methods: {
-    _query(pageIndex) {
-      var _self = this
-      pageIndex = pageIndex || _self.pageIndex
-      Api.getUsers({
-        searchText: _self.searchText,
-        pageIndex: pageIndex,
-        pageSize: _self.pageSize
-      }).then(function(response) {
-        if (response.success) {
-          _self.users = response.users
-          _self.totalPageCount = response.totalPageCount
-          _self.pageIndex = pageIndex
-        }
-      })
+        curUser: {
+          id: undefined,
+          username: '',
+          fullName: '',
+          email: ''
+        },
+        dialogVisible: false,
+        dialogStatus: ''
+      }
     },
-    search() {
-      this.searchText = this.searchTextLive
-      this._query(1)
+    components: {
+      Pagination,
+      MyDialog
+    },
+    methods: {
+      _query(pageIndex) {
+        const _self = this
+        Api.getUsers({
+          searchText: _self.listQuery.searchText,
+          pageIndex: pageIndex || _self.listQuery.pageIndex,
+          pageSize: _self.listQuery.pageSize
+        }).then(function(response) {
+          if (response.success) {
+            _self.users = response.users
+            _self.totalPageCount = response.totalPageCount
+            _self.listQuery.pageIndex = pageIndex
+          }
+        })
+      },
+      search() {
+        this._query(1)
+      },
+
+      resetCurUser() {
+        this.curUser = {
+          id: undefined,
+          username: '',
+          fullName: '',
+          email: ''
+        }
+      },
+
+      handleCreate() {
+        this.resetCurUser()
+        this.dialogStatus = 'create'
+        this.dialogVisible = true
+      },
+      createUser() {
+        Api.createUser({ user: this.curUser }).then((user) => {
+          this.users.unshift(this.curUser)
+          this.dialogVisible = false
+          this.notify({ title: '', message: 'create successful', type: 'info', duration: '' })
+        })
+      },
+
+      handleUpdate(userId) {
+        this.dialogStatus = 'update'
+        this.dialogVisible = true
+        this.resetCurUser()
+
+        Api.getUser({ id: userId }).then((response) => {
+          this.curUser = response.user // this.curUser = Object.assign({}, response.user)
+        })
+      },
+      updateUser() {
+        Api.updateUser({ user: this.curUser }).then(() => {
+          for (const user of this.users) {
+            if (user.id === this.curUser.id) {
+              const index = this.users.indexOf(user)
+              this.users.splice(index, 1, this.curUser)
+              break
+            }
+          }
+          this.notify({ title: '', message: 'update successful', type: 'warning', duration: '' })
+          this.dialogVisible = false
+        })
+      },
+
+      handleDelete(userId) {
+        this.dialogStatus = 'delete'
+        this.dialogVisible = true
+        this.resetCurUser()
+
+        Api.getUser({ id: userId }).then((response) => {
+          this.curUser = response.user
+        })
+      },
+      deleteUser() {
+        Api.deleteUser({ user: this.curUser }).then(() => {
+          for (const user of this.users) {
+            if (user.id === this.curUser.id) {
+              const index = this.users.indexOf(user)
+              this.users.splice(index, 1)
+              break
+            }
+          }
+          this.notify({ title: '', message: 'delete successful', type: 'success', duration: '' })
+          this.dialogVisible = false
+        })
+      },
+      notify(msg) {
+        console.log(`title: ${msg.title}, message: ${msg.message}, type: ${msg.type}`) // TODO: make it component
+      }
+    },
+    created() {
+      this._query()
     }
-  },
-  created() {
-    this._query()
   }
-}
+
 </script>
 
 <style>
-  .table tbody tr td{
-    vertical-align:middle
+  .table tbody tr td {
+    vertical-align: middle
   }
-  .table thead th{
+
+  .table thead th {
     text-align: center
   }
+
 </style>

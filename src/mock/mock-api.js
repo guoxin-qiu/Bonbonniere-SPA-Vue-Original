@@ -42,11 +42,46 @@ Mock.onGet('users').reply(function(config) {
   })
   const totalPageCount = Math.ceil(allusers.length / pageSize) || 1
   users = allusers.orderBy(user => {
-    return user.Username
+    return user.username
   }).skip(pageSize * (pageIndex - 1)).take(pageSize)
   return [200, {
     success: true,
     users: users,
     totalPageCount: totalPageCount
+  }]
+})
+
+Mock.onGet('user').reply(function(config) {
+  const id = config.id
+  const user = DB.User.getAll().first(user => {
+    return user.id === id
+  })
+
+  return [200, {
+    success: true,
+    user: user
+  }]
+})
+
+Mock.onGet('user/update').reply(function(config) {
+  const user = config.user
+  DB.User.update(user.id, user)
+
+  return [200, {
+    success: true
+  }]
+})
+
+Mock.onGet('user/create').reply(function(config) {
+  return [200, {
+    user: DB.User.add(config.user),
+    success: true
+  }]
+})
+
+Mock.onGet('user/delete').reply(function(config) {
+  return [200, {
+    user: DB.User.delete(config.user.id),
+    success: true
   }]
 })

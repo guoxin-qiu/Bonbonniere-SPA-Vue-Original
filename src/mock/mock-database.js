@@ -22,29 +22,30 @@ function Repository(storageKey, jsonKey) {
     getMaxId: function(list) {
       let maxId = 1
       for (let i = 0; i < list.length; i++) {
-        maxId = maxId > list[i].Id ? maxId : list[i].Id
+        maxId = maxId > list[i].id ? maxId : list[i].id
       }
       return maxId
     },
     add: function(item) {
       const list = this.getAll()
-      item.Id = this.getMaxId(list) + 1
+      item.id = this.getMaxId(list) + 1
       list.push(item)
       _setStorage(list)
+      return item
     },
     addRange: function(itemArray) {
       const list = this.getAll()
       const newId = this.getMaxId(list) + 1
       for (let i = 0; i < itemArray.length; i++) {
-        itemArray[i].Id = newId + i
+        itemArray[i].id = newId + i
         list.push(itemArray[i])
       }
       _setStorage(list)
     },
-    update: function(id, itemForUpdate) {
+    update: function(id, itemForUpdate) { // TODO: need param 'id'?
       const list = this.getAll()
       for (let i = 0; i < list.length; i++) {
-        if (list[i].Id === id) {
+        if (list[i].id === id) {
           list[i] = itemForUpdate
           break
         }
@@ -54,7 +55,7 @@ function Repository(storageKey, jsonKey) {
     delete: function(id) {
       const list = this.getAll()
       for (let i = 0; i < list.length; i++) {
-        if (list[i].Id === id) {
+        if (list[i].id === id) {
           list.splice(i, 1)
           break
         }
