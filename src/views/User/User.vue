@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import Pagination from '../components/Pagination'
-import Api from '../utils/api'
+import Pagination from '../../components/Pagination'
+import Api from '../../utils/api'
 
 export default{
   data() {

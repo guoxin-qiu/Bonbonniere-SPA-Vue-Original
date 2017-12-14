@@ -27,7 +27,7 @@ export default new Router({
     {
       path: '/User',
       name: 'User',
-      component: resolve => require(['../views/User.vue'], resolve),
+      component: resolve => require(['../views/User/User.vue'], resolve),
       meta: { requireAuth: true }
     }
   ]
