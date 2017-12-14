@@ -26,8 +26,6 @@
 </template>
 <script>
 import api from '../utils/api'
-import auth from '../utils/auth-helper'
-import md5 from 'js-md5'
 export default {
   data() {
     return {
@@ -44,13 +42,11 @@ export default {
         _self.message = "username or password can not be empty."
         return
       }
-      api.checkLogin(_self.username, md5(_self.password)) // TODO: remenberMe??
-      .then(function(data){
-        if (data.loginSuccess) {
-            auth.setUserInfo(data.userInfo)
+      api.login(_self.username, _self.password, _self.rememberMe)
+      .then(function(success){
+        if (success) {
             let redirectUrl = decodeURIComponent(_self.$route.query.redirect || '/')
             _self.$router.push({path: redirectUrl})
-            _self.$global.isAuthenticated = true
           } else {
             _self.message = "username or password is not correct, please try again."
           }

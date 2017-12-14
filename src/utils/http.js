@@ -34,8 +34,21 @@ export function fetch(url, params) {
   });
 }
 
+export function post(url, params) {
+  return new Promise((resolve, reject) => {
+    axios.post(url, params).then((response) => {
+      resolve(response.data)
+    }).catch((error) => {
+      reject(error)
+    })
+  });
+}
+
 export default{
   fetch(url, params){
     return fetch(url, params)
+  },
+  post(url, params){
+    return post(url, params)
   }
 }

@@ -1,6 +1,6 @@
 import DB from './mock-database'
 import Mock from 'mockjs'
-import Auth from '../utils/auth-helper'
+import Auth from '../utils/auth'
 const Random = Mock.Random;
 
 (function () {

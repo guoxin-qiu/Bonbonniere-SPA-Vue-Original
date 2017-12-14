@@ -3,16 +3,15 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import auth from './utils/auth-helper'
-import 'babel-polyfill'
+import auth from './utils/auth'
 import stores from './store/index'
 require('./mock/mock-api.js')
 require('./mock/mock-database-init')
 
 Vue.config.productionTip = false
 
-Vue.prototype.$global = {
-  isAuthenticated: auth.isAuthenticated()
+Vue.prototype.$isAuthenticated = function(){
+  return auth.isAuthenticated()
 }
 
 router.beforeEach((to, from, next) => {

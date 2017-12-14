@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <loading v-show="showLoading"></loading>
-    <app-header v-if="$global.isAuthenticated"></app-header>
+    <app-header v-if="$isAuthenticated()"></app-header>
     <div class="container">
       <div>
         <router-view/>

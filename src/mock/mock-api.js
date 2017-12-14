@@ -2,6 +2,8 @@ import axios from 'axios'
 require('linqjs')
 import DB from './mock-database'
 import md5 from 'js-md5'
+
+const uuidv1 = require('uuid/v1');
 const testPwdMd5 = md5('admin')
 
 import MockAdapter from 'axios-mock-adapter'
@@ -13,7 +15,8 @@ Mock.onGet('account/login').reply(function(config){
   let user = DB.User.getAll().first(function(user){
     return user.username === username
   })
-  return [200, { loginSuccess: (user && password === testPwdMd5), userInfo: user}]
+  let checkSuccess = (user && password === testPwdMd5)
+  return [200, {token: checkSuccess? uuidv1() : '', loginSuccess: checkSuccess, userInfo: user}]
 })
 
 Mock.onGet('account/menu').reply(200,DB.Menu.getAll())

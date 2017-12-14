@@ -25,27 +25,24 @@
 </style>
 
 <script>
-import auth from "../utils/auth-helper";
 import api from "../utils/api";
 export default {
   data() {
     return {
       menus: [],
-      isAuthenticated: auth.isAuthenticated(),
-      fullName: auth.getUserInfo().fullName
+      fullName: api.getLoginFullName()
     };
   },
   methods: {
     logoff() {
-      auth.removeUserInfo();
-      this.$global.isAuthenticated = false;
-      this.$router.push({ path: "/login" });
+      api.logoff()
+      this.$router.push({ path: "/login" })
     },
   },
   beforeCreate() {
     let _self = this;
     api.getMenu().then(function(data) {
-      _self.$data.menus = data;
+      _self.$data.menus = data
     });
   }
 };
