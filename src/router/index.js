@@ -23,6 +23,12 @@ export default new Router({
       name: 'Home',
       component: resolve => require(['../views/Home.vue'], resolve),
       meta: { requireAuth: true }
+    },
+    {
+      path: '/User',
+      name: 'User',
+      component: resolve => require(['../views/User.vue'], resolve),
+      meta: { requireAuth: true }
     }
   ]
 })

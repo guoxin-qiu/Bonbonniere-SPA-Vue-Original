@@ -28,3 +28,25 @@ Mock.onGet('account/login').reply(function(config) {
 })
 
 Mock.onGet('account/menu').reply(200, DB.Menu.getAll().where(menu => menu.IsActive))
+
+Mock.onGet('users').reply(function(config) {
+  const searchKey = config.searchText.toLowerCase()
+  const pageIndex = config.pageIndex
+  const pageSize = config.pageSize
+  let users = DB.User.getAll()
+  const allusers = users.where(user => {
+    return searchKey === '' ||
+      user.username.toLowerCase().indexOf(searchKey) > -1 ||
+      user.fullName.toLowerCase().indexOf(searchKey) > -1 ||
+      user.email.toLowerCase().indexOf(searchKey) > -1
+  })
+  const totalPageCount = Math.ceil(allusers.length / pageSize) || 1
+  users = allusers.orderBy(user => {
+    return user.Username
+  }).skip(pageSize * (pageIndex - 1)).take(pageSize)
+  return [200, {
+    success: true,
+    users: users,
+    totalPageCount: totalPageCount
+  }]
+})

@@ -26,10 +26,15 @@ function getMenu() {
   return Http.fetch('account/menu')
 }
 
+function getUsers(params) {
+  return Http.fetch('users', params)
+}
+
 export default {
   login: login,
   logoff: logoff,
   getLoginFullName: getLoginFullName,
+  getMenu: getMenu,
 
-  getMenu: getMenu
+  getUsers: getUsers
 }
