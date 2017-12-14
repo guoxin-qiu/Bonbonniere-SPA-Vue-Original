@@ -19,12 +19,12 @@ import Loading from './components/Loading'
 
 export default {
   name: 'app',
-  computed:{
+  computed: {
     ...mapGetters({
       showLoading: 'showLoading'
     })
   },
-  components:{
+  components: {
     AppHeader,
     AppFooter,
     Loading

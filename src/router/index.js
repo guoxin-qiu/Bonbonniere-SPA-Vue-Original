@@ -6,7 +6,7 @@ import Login from '@/pages/Login.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',// hash, history
+  mode: 'history', // hash, history
   routes: [
     {
       path: '/',
@@ -16,13 +16,13 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
-      meta: { requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
       path: '/home',
       name: 'Home',
       component: resolve => require(['../pages/Home.vue'], resolve),
-      meta: { requireAuth: true}
+      meta: { requireAuth: true }
     }
   ]
 })

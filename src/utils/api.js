@@ -14,15 +14,13 @@ function login(username, password, rememberMe) {
   })
 }
 
-function logoff(){
+function logoff() {
   auth.removeAuthentication()
 }
 
-function getLoginFullName(){
+function getLoginFullName() {
   return auth.fullName()
 }
-
-
 
 function getMenu() {
   return Http.fetch('account/menu')

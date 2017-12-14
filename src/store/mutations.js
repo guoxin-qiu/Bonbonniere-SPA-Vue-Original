@@ -9,19 +9,19 @@ const getters = {
 }
 
 const actions = {
-  showLoader({commit}){
-    commit(SHOWLOADING,true)
+  showLoader({ commit }) {
+    commit(SHOWLOADING, true)
   },
-  hideLoader({commit}){
-    commit(HIDELOADING,false)
+  hideLoader({ commit }) {
+    commit(HIDELOADING, false)
   }
 }
 
 const mutations = {
-  [SHOWLOADING](state){
-    state.showLoading  = true
+  [SHOWLOADING](state) {
+    state.showLoading = true
   },
-  [HIDELOADING](state){
+  [HIDELOADING](state) {
     state.showLoading = false
   }
 }

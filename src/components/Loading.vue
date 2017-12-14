@@ -97,11 +97,11 @@ export default {
   computed: {
     styleObject() {
       return {
-        marginTop: this.marginTop || "auto",
-        marginLeft: this.marginLeft || "auto"
-      };
+        marginTop: this.marginTop || 'auto',
+        marginLeft: this.marginLeft || 'auto'
+      }
     }
   },
-  props: ["marginTop", "marginLeft"]
-};
+  props: ['marginTop', 'marginLeft']
+}
 </script>

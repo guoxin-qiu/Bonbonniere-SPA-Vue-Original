@@ -28,25 +28,25 @@
 </style>
 
 <script>
-import api from "../utils/api";
+import api from '../utils/api'
 export default {
   data() {
     return {
       menus: [],
       fullName: api.getLoginFullName()
-    };
+    }
   },
   methods: {
     logoff() {
-      api.logoff();
-      this.$router.push({ path: "/login" });
+      api.logoff()
+      this.$router.push({ path: '/login' })
     }
   },
   beforeCreate() {
-    let _self = this;
+    const _self = this
     api.getMenu().then(function(data) {
-      _self.$data.menus = data;
-    });
+      _self.$data.menus = data
+    })
   }
-};
+}
 </script>

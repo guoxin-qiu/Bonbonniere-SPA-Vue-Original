@@ -10,7 +10,7 @@ require('./mock/mock-database-init')
 
 Vue.config.productionTip = false
 
-Vue.prototype.$isAuthenticated = function(){
+Vue.prototype.$isAuthenticated = function() {
   return auth.isAuthenticated()
 }
 
@@ -39,8 +39,5 @@ new Vue({
   template: '<App/>',
   components: {
     App
-  },
-  // watch:{
-  //   '$route': 'checkLogin'
-  // }
+  }
 })

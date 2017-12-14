@@ -1,11 +1,11 @@
-let storage = window.sessionStorage //window.localStorage
-let authKey = '$AUTHENTICATION'
+const storage = window.sessionStorage // window.localStorage
+const authKey = '$AUTHENTICATION'
 
 function setAuthentication(token, userInfo, rememberMe) {
   if (!token) {
     throw new Error('Token can not be null.')
   }
-  let authInfo = {
+  const authInfo = {
     token: token,
     userInfo: {
       username: userInfo.username,
@@ -24,13 +24,13 @@ function isAuthenticated() {
   return !!retrieveAuthentication().token
 }
 
-function fullName(){
+function fullName() {
   return retrieveAuthentication().userInfo.fullName
 }
 
 function retrieveAuthentication() {
   try {
-    let authInfo = storage.getItem(authKey)
+    const authInfo = storage.getItem(authKey)
     if (authInfo) {
       return JSON.parse(authInfo)
     } else {

@@ -146,37 +146,37 @@
 }
 </style>
 <script>
-import api from "../utils/api";
+import api from '../utils/api'
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       rememberMe: false,
-      message: ""
-    };
+      message: ''
+    }
   },
   methods: {
     login: function() {
-      var _self = this;
-      if (_self.username.length == 0 || _self.password.length == 0) {
-        _self.message = "username or password can not be empty.";
-        return;
+      var _self = this
+      if (_self.username.length === 0 || _self.password.length === 0) {
+        _self.message = 'username or password can not be empty.'
+        return
       }
       api
         .login(_self.username, _self.password, _self.rememberMe)
         .then(function(success) {
           if (success) {
-            let redirectUrl = decodeURIComponent(
-              _self.$route.query.redirect || "/"
-            );
-            _self.$router.push({ path: redirectUrl });
+            const redirectUrl = decodeURIComponent(
+              _self.$route.query.redirect || '/'
+            )
+            _self.$router.push({ path: redirectUrl })
           } else {
             _self.message =
-              "username or password is not correct, please try again.";
+              'username or password is not correct, please try again.'
           }
-        });
+        })
     }
   }
-};
+}
 </script>
