@@ -5,6 +5,7 @@
     </footer>
   </div>
 </template>
+
 <script>
   export default {
     data() {

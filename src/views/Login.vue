@@ -22,6 +22,45 @@
     </div>
   </div>
 </template>
+
+<script>
+  import api from '../utils/api'
+  export default {
+    data() {
+      return {
+        username: '',
+        password: '',
+        rememberMe: false,
+        message: ''
+      }
+    },
+    methods: {
+      login: function() {
+        var _self = this
+        if (_self.username.length === 0 || _self.password.length === 0) {
+          _self.message = 'username or password can not be empty.'
+          return
+        }
+        api
+          .login(_self.username, _self.password, _self.rememberMe)
+          .then(function(success) {
+            if (success) {
+              const redirectUrl = decodeURIComponent(
+                _self.$route.query.redirect || '/'
+              )
+              _self.$router.push({
+                path: redirectUrl
+              })
+            } else {
+              _self.message =
+                'username or password is not correct, please try again.'
+            }
+          })
+      }
+    }
+  }
+</script>
+
 <style scoped>
   .form-bg {
     background: #fff;
@@ -145,41 +184,3 @@
     outline: none;
   }
 </style>
-
-<script>
-  import api from '../utils/api'
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-        rememberMe: false,
-        message: ''
-      }
-    },
-    methods: {
-      login: function() {
-        var _self = this
-        if (_self.username.length === 0 || _self.password.length === 0) {
-          _self.message = 'username or password can not be empty.'
-          return
-        }
-        api
-          .login(_self.username, _self.password, _self.rememberMe)
-          .then(function(success) {
-            if (success) {
-              const redirectUrl = decodeURIComponent(
-                _self.$route.query.redirect || '/'
-              )
-              _self.$router.push({
-                path: redirectUrl
-              })
-            } else {
-              _self.message =
-                'username or password is not correct, please try again.'
-            }
-          })
-      }
-    }
-  }
-</script>

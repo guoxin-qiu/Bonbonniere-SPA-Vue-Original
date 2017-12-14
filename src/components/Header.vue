@@ -24,12 +24,6 @@
     </nav>
   </div>
 </template>
-<style>
-  .navbar-inverse {
-    background-color: #366d88;
-    border-color: #366d88;
-  }
-</style>
 
 <script>
   import api from '../utils/api'
@@ -56,3 +50,10 @@
     }
   }
 </script>
+
+<style>
+  .navbar-inverse {
+    background-color: #366d88;
+    border-color: #366d88;
+  }
+</style>

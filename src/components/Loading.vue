@@ -6,6 +6,21 @@
     </div>
   </div>
 </template>
+
+<script>
+  export default {
+    computed: {
+      styleObject() {
+        return {
+          marginTop: this.marginTop || 'auto',
+          marginLeft: this.marginLeft || 'auto'
+        }
+      }
+    },
+    props: ['marginTop', 'marginLeft']
+  }
+</script>
+
 <style scoped>
   .loading-div {
     position: fixed;
@@ -91,17 +106,3 @@
     }
   }
 </style>
-
-<script>
-  export default {
-    computed: {
-      styleObject() {
-        return {
-          marginTop: this.marginTop || 'auto',
-          marginLeft: this.marginLeft || 'auto'
-        }
-      }
-    },
-    props: ['marginTop', 'marginLeft']
-  }
-</script>
