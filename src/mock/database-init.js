@@ -1,6 +1,7 @@
 import DB from './database'
 import Mock from 'mockjs'
 import Auth from '../utils/auth'
+import md5 from 'js-md5'
 const Random = Mock.Random;
 
 (function() {
@@ -17,13 +18,15 @@ function initUser() {
     users.push({
       username: 'admin',
       fullName: 'administrator',
+      password: md5('admin'),
       email: 'admin@sydq.net'
     })
     for (let i = 1; i <= 35; i++) {
       const firstName = Random.first()
       const user = {
-        username: firstName,
+        username: firstName + i,
         fullName: `${firstName} ${Random.last()}`,
+        password: md5('admin'),
         email: `${firstName}@sydq.net`
       }
       users.push(user)
