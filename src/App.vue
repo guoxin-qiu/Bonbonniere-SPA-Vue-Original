@@ -15,8 +15,8 @@
   import {
     mapGetters
   } from 'vuex'
-  import AppHeader from './components/Header'
-  import AppFooter from './components/Footer'
+  import AppHeader from './views/Layout/Header'
+  import AppFooter from './views/Layout/Footer'
   import Loading from './components/Loading'
 
   export default {
