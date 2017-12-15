@@ -1,11 +1,11 @@
-require('linqjs')
 import DB from './database'
 import { Mock } from './api-mock'
 import { ApiUrl } from '../api/api-url'
+var linq = require('linq')
 
 Mock.onGet(ApiUrl.USER).reply(config => {
   if (config.id) {
-    const user = DB.User.getAll().first(user => {
+    const user = linq.from(DB.User.getAll()).first(user => {
       return user.id === config.id
     })
 
@@ -17,20 +17,27 @@ Mock.onGet(ApiUrl.USER).reply(config => {
     const searchKey = config.searchText.toLowerCase()
     const pageIndex = config.pageIndex
     const pageSize = config.pageSize
-    let users = DB.User.getAll()
-    const allusers = users.where(user => {
+    const sortCol = config.sortCol
+    const sortOrder = config.sortOrder
+    let users = linq.from(DB.User.getAll()).where(user => {
       return searchKey === '' ||
         user.username.toLowerCase().indexOf(searchKey) > -1 ||
         user.fullName.toLowerCase().indexOf(searchKey) > -1 ||
         user.email.toLowerCase().indexOf(searchKey) > -1
     })
-    const totalPageCount = Math.ceil(allusers.length / pageSize) || 1
-    users = allusers.orderBy(user => {
-      return user.username
-    }).skip(pageSize * (pageIndex - 1)).take(pageSize)
+    const totalPageCount = Math.ceil(users.count() / pageSize) || 1
+    console.log(sortCol)
+    console.log(sortOrder)
+    if (sortOrder === '-') {
+      users = users.orderByDescending(user => user[sortCol])
+    } else {
+      users = users.orderBy(user => user[sortCol])
+    }
+    console.log(users)
+    users = users.skip(pageSize * (pageIndex - 1)).take(pageSize)
     return [200, {
       success: true,
-      users: users,
+      users: users.toArray(),
       totalPageCount: totalPageCount
     }]
   }

@@ -17,17 +17,17 @@ function initUser() {
     const users = []
     users.push({
       username: 'admin',
-      fullName: 'administrator',
+      fullName: 'Administrator',
       password: md5('admin'),
       email: 'admin@sydq.net'
     })
     for (let i = 1; i <= 35; i++) {
       const firstName = Random.first()
       const user = {
-        username: firstName + i,
+        username: firstName.toLowerCase() + i,
         fullName: `${firstName} ${Random.last()}`,
         password: md5('admin'),
-        email: `${firstName}@sydq.net`
+        email: `${firstName.toLowerCase()}@sydq.net`
       }
       users.push(user)
     }

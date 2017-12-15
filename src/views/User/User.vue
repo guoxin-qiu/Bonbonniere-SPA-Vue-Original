@@ -19,7 +19,10 @@
           <col style="width:30%;" />
           <col style="width:10%;" />
           <thead>
-            <th v-for="col in columns" :key="col" v-text="col"></th>
+            <th v-for="col in columns" :key="col" style="cursor:pointer" @click="sort(col)">{{col | capitalize}}
+              <span class="glyphicon glyphicon-arrow-up" v-show="listQuery.sortOrder === '-' && listQuery.sortCol === col"></span>
+              <span class="glyphicon glyphicon-arrow-down" v-show="listQuery.sortOrder === '+' && listQuery.sortCol === col"></span>
+            </th>
             <th></th>
           </thead>
           <tbody>
@@ -77,7 +80,9 @@
         listQuery: {
           searchText: '',
           pageSize: 8,
-          pageIndex: 1
+          pageIndex: 1,
+          sortCol: 'username',
+          sortOrder: '+'
         },
         totalPageCount: 1,
 
@@ -95,22 +100,40 @@
       Pagination,
       MyDialog
     },
+    filters: {
+      capitalize(value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+      }
+    },
     methods: {
       _query(pageIndex) {
+        this.listQuery.pageIndex = pageIndex || this.listQuery.pageIndex
         this.$http.GET(this.$api.USER, {
           searchText: this.listQuery.searchText,
-          pageIndex: pageIndex || this.listQuery.pageIndex,
-          pageSize: this.listQuery.pageSize
+          pageIndex: this.listQuery.pageIndex,
+          pageSize: this.listQuery.pageSize,
+          sortCol: this.listQuery.sortCol,
+          sortOrder: this.listQuery.sortOrder
         }).then(response => {
           if (response.success) {
             this.users = response.users
             this.totalPageCount = response.totalPageCount
-            this.listQuery.pageIndex = pageIndex
           }
         })
       },
       search() {
         this._query(1)
+      },
+      sort(col) {
+        if (this.listQuery.sortCol === col) {
+          this.listQuery.sortOrder = this.listQuery.sortOrder === '+' ? '-' : '+'
+        } else {
+          this.listQuery.sortCol = col
+          this.listQuery.sortOrder = '+'
+        }
+        this._query()
       },
 
       resetCurUser() {
