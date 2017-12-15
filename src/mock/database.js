@@ -18,7 +18,12 @@ function Repository(storageKey, jsonKey) {
     storage.setItem(storageKey, JSON.stringify(table))
   }
 
+  let maxId = 0
+
   return {
+    getNewId() {
+      return ++maxId
+    },
     getMaxId: function(list) {
       let maxId = 1
       for (let i = 0; i < list.length; i++) {
@@ -28,16 +33,15 @@ function Repository(storageKey, jsonKey) {
     },
     add: function(item) {
       const list = this.getAll()
-      item.id = this.getMaxId(list) + 1
+      item.id = this.getNewId()
       list.push(item)
       _setStorage(list)
       return item
     },
     addRange: function(itemArray) {
       const list = this.getAll()
-      const newId = this.getMaxId(list) + 1
       for (let i = 0; i < itemArray.length; i++) {
-        itemArray[i].id = newId + i
+        itemArray[i].id = this.getNewId()
         list.push(itemArray[i])
       }
       _setStorage(list)

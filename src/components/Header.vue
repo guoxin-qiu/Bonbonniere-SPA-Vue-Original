@@ -26,26 +26,24 @@
 </template>
 
 <script>
-  import api from '../utils/api'
+  import auth from '../utils/auth'
   export default {
     data() {
       return {
         menus: [],
-        fullName: api.getLoginFullName()
+        fullName: auth.fullName()
       }
     },
     methods: {
       logoff() {
-        api.logoff()
-        this.$router.push({
-          path: '/login'
-        })
+        auth.removeAuthentication()
+        this.$router.push({ path: '/login' })
       }
     },
     beforeCreate() {
-      const _self = this
-      api.getMenu().then(function(data) {
-        _self.$data.menus = data
+      this.$http.GET(this.$api.MENU)
+      .then(data => {
+        this.$data.menus = data
       })
     }
   }

@@ -1,4 +1,4 @@
-import DB from './mock-database'
+import DB from './database'
 import Mock from 'mockjs'
 import Auth from '../utils/auth'
 const Random = Mock.Random;
@@ -15,15 +15,13 @@ function initUser() {
   function generateUser() {
     const users = []
     users.push({
-      id: 0,
       username: 'admin',
       fullName: 'administrator',
       email: 'admin@sydq.net'
     })
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 35; i++) {
       const firstName = Random.first()
       const user = {
-        id: i,
         username: firstName,
         fullName: `${firstName} ${Random.last()}`,
         email: `${firstName}@sydq.net`
@@ -39,17 +37,14 @@ function initUser() {
 function initMenu() {
   DB.Menu.deleteAll()
   DB.Menu.addRange([{
-    Id: 1,
     Text: 'HOME',
     Url: '/home',
     IsActive: true
   }, {
-    Id: 2,
     Text: 'USER',
     Url: '/user',
     IsActive: true
   }, {
-    Id: 99,
     Text: 'API',
     Url: '/api',
     IsActive: false

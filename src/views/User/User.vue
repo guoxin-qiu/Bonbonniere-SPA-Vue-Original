@@ -66,7 +66,6 @@
 </template>
 
 <script>
-  import Api from '../../utils/api'
   import Pagination from '../../components/Pagination'
   import MyDialog from '../../components/Dialog'
 
@@ -77,7 +76,7 @@
         users: [],
         listQuery: {
           searchText: '',
-          pageSize: 2,
+          pageSize: 8,
           pageIndex: 1
         },
         totalPageCount: 1,
@@ -98,16 +97,15 @@
     },
     methods: {
       _query(pageIndex) {
-        const _self = this
-        Api.getUsers({
-          searchText: _self.listQuery.searchText,
-          pageIndex: pageIndex || _self.listQuery.pageIndex,
-          pageSize: _self.listQuery.pageSize
-        }).then(function(response) {
+        this.$http.GET(this.$api.USER, {
+          searchText: this.listQuery.searchText,
+          pageIndex: pageIndex || this.listQuery.pageIndex,
+          pageSize: this.listQuery.pageSize
+        }).then(response => {
           if (response.success) {
-            _self.users = response.users
-            _self.totalPageCount = response.totalPageCount
-            _self.listQuery.pageIndex = pageIndex
+            this.users = response.users
+            this.totalPageCount = response.totalPageCount
+            this.listQuery.pageIndex = pageIndex
           }
         })
       },
@@ -130,8 +128,9 @@
         this.dialogVisible = true
       },
       createUser() {
-        Api.createUser({ user: this.curUser }).then((user) => {
-          this.users.unshift(this.curUser)
+        this.$http.POST(this.$api.USER, { user: this.curUser })
+        .then(response => {
+          this.users.unshift(response.user)
           this.dialogVisible = false
           this.notify({ title: '', message: 'create successful', type: 'info', duration: '' })
         })
@@ -142,12 +141,14 @@
         this.dialogVisible = true
         this.resetCurUser()
 
-        Api.getUser({ id: userId }).then((response) => {
+        this.$http.GET(this.$api.USER, { id: userId })
+        .then((response) => {
           this.curUser = response.user // this.curUser = Object.assign({}, response.user)
         })
       },
       updateUser() {
-        Api.updateUser({ user: this.curUser }).then(() => {
+        this.$http.PUT(this.$api.USER, { user: this.curUser })
+        .then(() => {
           for (const user of this.users) {
             if (user.id === this.curUser.id) {
               const index = this.users.indexOf(user)
@@ -165,12 +166,14 @@
         this.dialogVisible = true
         this.resetCurUser()
 
-        Api.getUser({ id: userId }).then((response) => {
+        this.$http.GET(this.$api.USER, { id: userId })
+        .then((response) => {
           this.curUser = response.user
         })
       },
       deleteUser() {
-        Api.deleteUser({ user: this.curUser }).then(() => {
+        this.$http.DELETE(this.$api.USER, { id: this.curUser.id })
+        .then(() => {
           for (const user of this.users) {
             if (user.id === this.curUser.id) {
               const index = this.users.indexOf(user)

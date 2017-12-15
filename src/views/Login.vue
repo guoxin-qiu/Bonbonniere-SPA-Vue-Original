@@ -24,7 +24,8 @@
 </template>
 
 <script>
-  import api from '../utils/api'
+  import auth from '../utils/auth'
+  import md5 from 'js-md5'
   export default {
     data() {
       return {
@@ -35,27 +36,24 @@
       }
     },
     methods: {
-      login: function() {
-        var _self = this
-        if (_self.username.length === 0 || _self.password.length === 0) {
-          _self.message = 'username or password can not be empty.'
+      login() {
+        if (this.username.length === 0 || this.password.length === 0) {
+          this.message = 'username or password can not be empty.'
           return
         }
-        api
-          .login(_self.username, _self.password, _self.rememberMe)
-          .then(function(success) {
-            if (success) {
-              const redirectUrl = decodeURIComponent(
-                _self.$route.query.redirect || '/'
-              )
-              _self.$router.push({
-                path: redirectUrl
-              })
-            } else {
-              _self.message =
-                'username or password is not correct, please try again.'
-            }
-          })
+        this.$http.GET(this.$api.LOGIN, {
+          username: this.username,
+          password: md5(this.password),
+          rememberMe: this.rememberMe })
+        .then(response => {
+          if (response.loginSuccess) {
+            auth.setAuthentication(response.token, response.userInfo, this.rememberMe)
+            const redirectUrl = decodeURIComponent(this.$route.query.redirect || '/')
+            this.$router.push({ path: redirectUrl })
+          } else {
+            this.message = 'username or password is not correct, please try again.'
+          }
+        })
       }
     }
   }

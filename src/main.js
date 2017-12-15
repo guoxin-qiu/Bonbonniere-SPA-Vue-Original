@@ -5,14 +5,17 @@ import App from './App'
 import router from './router'
 import auth from './utils/auth'
 import stores from './store/index'
-require('./mock/mock-api.js')
-require('./mock/mock-database-init')
+import HTTP from './utils/http'
+import { ApiUrl } from './api/api-url'
+require('./mock/index.js')
 
 Vue.config.productionTip = false
 
 Vue.prototype.$isAuthenticated = function() {
   return auth.isAuthenticated()
 }
+Vue.prototype.$http = HTTP
+Vue.prototype.$api = ApiUrl
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
