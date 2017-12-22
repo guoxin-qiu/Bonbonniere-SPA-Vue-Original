@@ -40,16 +40,16 @@ function initUser() {
 function initMenu() {
   DB.Menu.deleteAll()
   DB.Menu.addRange([{
-    Text: 'HOME',
-    Url: '/home',
-    IsActive: true
+    text: 'HOME',
+    url: '/home',
+    isActive: true
   }, {
-    Text: 'USER',
-    Url: '/user',
-    IsActive: true
+    text: 'USER',
+    url: '/user',
+    isActive: true
   }, {
-    Text: 'API',
-    Url: '/api',
-    IsActive: false
+    text: 'API',
+    url: '/api',
+    isActive: false
   }])
 }

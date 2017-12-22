@@ -8,7 +8,7 @@
         <div class="navbar-collapse collapse" id="navigation-menu">
           <ul class="nav navbar-nav">
             <li v-for="(menu,index) in menus" :key="index">
-              <router-link :to="menu.Url" v-text="menu.Text"></router-link>
+              <router-link :to="menu.url" v-text="menu.text"></router-link>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">

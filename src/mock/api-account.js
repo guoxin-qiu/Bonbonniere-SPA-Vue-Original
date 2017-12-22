@@ -6,8 +6,8 @@ const uuidv1 = require('uuid/v1')
 const linq = require('linq')
 
 Mock.onGet(ApiUrl.LOGIN).reply(config => {
-  const username = config.username
-  const password = config.password
+  const username = config.params.username
+  const password = config.params.password
   const user = linq.from(DB.User.getAll()).firstOrDefault(function(user) {
     return user.username === username
   })
@@ -24,4 +24,4 @@ Mock.onGet(ApiUrl.LOGIN).reply(config => {
   })
 })
 
-Mock.onGet(ApiUrl.MENU).reply(200, linq.from(DB.Menu.getAll()).where(menu => menu.IsActive).toArray())
+Mock.onGet(ApiUrl.MENU).reply(200, linq.from(DB.Menu.getAll()).where(menu => menu.isActive).toArray())

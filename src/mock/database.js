@@ -18,13 +18,12 @@ function Repository(storageKey, jsonKey) {
     storage.setItem(storageKey, JSON.stringify(table))
   }
 
-  let maxId = 0
-
   return {
-    getNewId() {
-      return ++maxId
-    },
     getMaxId: function(list) {
+      if (list == null) {
+        return 1
+      }
+
       let maxId = 1
       for (let i = 0; i < list.length; i++) {
         maxId = maxId > list[i].id ? maxId : list[i].id
@@ -33,24 +32,37 @@ function Repository(storageKey, jsonKey) {
     },
     add: function(item) {
       const list = this.getAll()
-      item.id = this.getNewId()
+      item.id = this.getMaxId(list) + 1
       list.push(item)
       _setStorage(list)
       return item
     },
     addRange: function(itemArray) {
       const list = this.getAll()
+      const maxid = this.getMaxId(list)
       for (let i = 0; i < itemArray.length; i++) {
-        itemArray[i].id = this.getNewId()
+        itemArray[i].id = maxid + i + 1
         list.push(itemArray[i])
       }
       _setStorage(list)
     },
-    update: function(id, itemForUpdate) { // TODO: need param 'id'?
+    update: function(id, itemForUpdate) {
+      function copy(source, destination) {
+        for (var name in source) {
+          if (name !== 'id' && name in destination) {
+            if (typeof source[name] === 'object') {
+              destination[name] = (source[name].constructor === Array) ? [] : {}
+              copy(source[name], destination[name])
+            } else {
+              destination[name] = source[name]
+            }
+          }
+        }
+      }
       const list = this.getAll()
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {
-          list[i] = itemForUpdate
+          copy(itemForUpdate, list[i])
           break
         }
       }

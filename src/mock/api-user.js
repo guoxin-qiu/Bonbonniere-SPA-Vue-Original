@@ -1,51 +1,46 @@
 import DB from './database'
 import { Mock } from './api-mock'
 import { ApiUrl } from '../api/api-url'
+import Qs from 'qs'
 var linq = require('linq')
 
-Mock.onGet(ApiUrl.USER).reply(config => {
-  if (config.id) {
-    const user = linq.from(DB.User.getAll()).first(user => {
-      return user.id === config.id
-    })
-
-    return [200, {
-      success: true,
-      user: user
-    }]
-  } else {
-    const searchKey = config.searchText.toLowerCase()
-    const pageIndex = config.pageIndex
-    const pageSize = config.pageSize
-    const sortCol = config.sortCol
-    const sortOrder = config.sortOrder
-    let users = linq.from(DB.User.getAll()).where(user => {
-      return searchKey === '' ||
-        user.username.toLowerCase().indexOf(searchKey) > -1 ||
-        user.fullName.toLowerCase().indexOf(searchKey) > -1 ||
-        user.email.toLowerCase().indexOf(searchKey) > -1
-    })
-    const totalPageCount = Math.ceil(users.count() / pageSize) || 1
-    console.log(sortCol)
-    console.log(sortOrder)
-    if (sortOrder === '-') {
-      users = users.orderByDescending(user => user[sortCol])
-    } else {
-      users = users.orderBy(user => user[sortCol])
-    }
-    console.log(users)
-    users = users.skip(pageSize * (pageIndex - 1)).take(pageSize)
-    return [200, {
-      success: true,
-      users: users.toArray(),
-      totalPageCount: totalPageCount
-    }]
-  }
+Mock.onGet(new RegExp(`${ApiUrl.USER}\/\\d+`)).reply(config => {
+  const id = Number(config.url.substring(config.url.lastIndexOf('/') + 1))
+  const user = linq.from(DB.User.getAll()).first(user => {
+    return user.id === id
+  })
+  return [200, user]
 })
 
-Mock.onPut(ApiUrl.USER).reply(config => {
-  const { user } = JSON.parse(config.data)
-  DB.User.update(user.id, user)
+Mock.onGet(ApiUrl.USER).reply(config => {
+  const searchKey = config.params.searchText.toLowerCase()
+  const pageIndex = config.params.pageIndex
+  const pageSize = config.params.pageSize
+  const sortCol = config.params.sortCol
+  const sortOrder = config.params.sortOrder
+  let users = linq.from(DB.User.getAll()).where(user => {
+    return searchKey === '' ||
+      user.username.toLowerCase().indexOf(searchKey) > -1 ||
+      user.fullName.toLowerCase().indexOf(searchKey) > -1 ||
+      user.email.toLowerCase().indexOf(searchKey) > -1
+  })
+  const totalPageCount = Math.ceil(users.count() / pageSize) || 1
+  if (sortOrder === '-') {
+    users = users.orderByDescending(user => user[sortCol])
+  } else {
+    users = users.orderBy(user => user[sortCol])
+  }
+  users = users.skip(pageSize * (pageIndex - 1)).take(pageSize)
+  return [200, {
+    users: users.toArray(),
+    totalPageCount: totalPageCount
+  }]
+})
+
+Mock.onPut(new RegExp(`${ApiUrl.USER}\/\\d+`)).reply(config => {
+  const id = Number(config.url.substring(config.url.lastIndexOf('/') + 1))
+  const user = Qs.parse(config.data)
+  DB.User.update(id, user)
 
   return [200, {
     success: true
@@ -53,16 +48,17 @@ Mock.onPut(ApiUrl.USER).reply(config => {
 })
 
 Mock.onPost(ApiUrl.USER).reply(config => {
-  const { user } = JSON.parse(config.data)
+  const user = Qs.parse(config.data)
   return [200, {
     user: DB.User.add(user),
     success: true
   }]
 })
 
-Mock.onDelete(ApiUrl.USER).reply(config => {
+Mock.onDelete(new RegExp(`${ApiUrl.USER}\/\\d+`)).reply(config => {
+  const id = Number(config.url.substring(config.url.lastIndexOf('/') + 1))
   return [200, {
-    user: DB.User.delete(config.id),
+    user: DB.User.delete(id),
     success: true
   }]
 })

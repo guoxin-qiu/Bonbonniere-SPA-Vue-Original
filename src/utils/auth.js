@@ -28,6 +28,10 @@ function fullName() {
   return retrieveAuthentication().userInfo.fullName
 }
 
+function getToken() {
+  return retrieveAuthentication().userInfo.token
+}
+
 function retrieveAuthentication() {
   try {
     const authInfo = storage.getItem(authKey)
@@ -52,5 +56,6 @@ export default {
   setAuthentication: setAuthentication,
   removeAuthentication: removeAuthentication,
   isAuthenticated: isAuthenticated,
-  fullName: fullName
+  fullName: fullName,
+  getToken: getToken
 }

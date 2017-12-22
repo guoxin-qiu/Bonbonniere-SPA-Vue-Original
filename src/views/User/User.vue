@@ -116,11 +116,9 @@
           pageSize: this.listQuery.pageSize,
           sortCol: this.listQuery.sortCol,
           sortOrder: this.listQuery.sortOrder
-        }).then(response => {
-          if (response.success) {
-            this.users = response.users
-            this.totalPageCount = response.totalPageCount
-          }
+        }).then(data => {
+          this.users = data.users
+          this.totalPageCount = data.totalPageCount
         })
       },
       search() {
@@ -151,7 +149,8 @@
         this.dialogVisible = true
       },
       createUser() {
-        this.$http.POST(this.$api.USER, { user: this.curUser })
+        const user = { username: this.curUser.username, fullName: this.curUser.fullName, email: this.curUser.email }
+        this.$http.POST(this.$api.USER, user)
         .then(response => {
           this.users.unshift(response.user)
           this.dialogVisible = false
@@ -163,14 +162,14 @@
         this.dialogStatus = 'update'
         this.dialogVisible = true
         this.resetCurUser()
-
         this.$http.GET(this.$api.USER, { id: userId })
-        .then((response) => {
-          this.curUser = response.user // this.curUser = Object.assign({}, response.user)
+        .then(data => {
+          this.curUser = data || this.curUser // this.curUser = Object.assign({}, response.user)
         })
       },
       updateUser() {
-        this.$http.PUT(this.$api.USER, { user: this.curUser })
+        const user = { username: this.curUser.username, fullName: this.curUser.fullName, email: this.curUser.email }
+        this.$http.PUT(this.$api.USER, this.curUser.id, user)
         .then(() => {
           for (const user of this.users) {
             if (user.id === this.curUser.id) {
@@ -190,12 +189,12 @@
         this.resetCurUser()
 
         this.$http.GET(this.$api.USER, { id: userId })
-        .then((response) => {
-          this.curUser = response.user
+        .then(data => {
+          this.curUser = data || this.curUser
         })
       },
       deleteUser() {
-        this.$http.DELETE(this.$api.USER, { id: this.curUser.id })
+        this.$http.DELETE(this.$api.USER, this.curUser.id)
         .then(() => {
           for (const user of this.users) {
             if (user.id === this.curUser.id) {

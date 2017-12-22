@@ -45,9 +45,9 @@
           username: this.username,
           password: md5(this.password),
           rememberMe: this.rememberMe })
-        .then(response => {
-          if (response.loginSuccess) {
-            auth.setAuthentication(response.token, response.userInfo, this.rememberMe)
+        .then(data => {
+          if (data.loginSuccess) {
+            auth.setAuthentication(data.token, data.userInfo, this.rememberMe)
             const redirectUrl = decodeURIComponent(this.$route.query.redirect || '/')
             this.$router.push({ path: redirectUrl })
           } else {
