@@ -6,7 +6,7 @@ import Qs from 'qs'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
-axios.defaults.baseURL = 'http://localhost:64511/api/'
+axios.defaults.baseURL = 'http://localhost:57014/api/'
 axios.defaults.timeout = 1000 * 15
 // axios.defaults.withCredentials = true
 
