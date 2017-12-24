@@ -47,6 +47,7 @@
           rememberMe: this.rememberMe })
         .then(data => {
           if (data.loginSuccess) {
+            this.$store.state.token = data.token
             auth.setAuthentication(data.token, data.userInfo, this.rememberMe)
             const redirectUrl = decodeURIComponent(this.$route.query.redirect || '/')
             this.$router.push({ path: redirectUrl })

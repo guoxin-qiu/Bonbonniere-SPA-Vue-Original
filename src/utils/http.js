@@ -1,16 +1,16 @@
 import axios from 'axios'
 import stores from '../store/index'
 import Qs from 'qs'
-// import auth from '../utils/auth'
-// const AUTH_TOKEN = auth.getToken()
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
 axios.defaults.baseURL = 'http://localhost:57014/api/'
 axios.defaults.timeout = 1000 * 15
-// axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true
 
 axios.interceptors.request.use(config => {
+  if (stores.state.token) {
+    config.headers.Authorization = stores.state.token
+  }
   stores.dispatch('showLoader')
   return config
 }, error => {

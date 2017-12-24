@@ -1,7 +1,8 @@
 import { SHOWLOADING, HIDELOADING } from './mutation-types'
 
 const state = {
-  showLoading: false
+  showLoading: false,
+  token: ''
 }
 
 const getters = {
