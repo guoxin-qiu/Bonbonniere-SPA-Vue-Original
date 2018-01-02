@@ -107,9 +107,13 @@
         return value.charAt(0).toUpperCase() + value.slice(1)
       }
     },
+    watch: {
+      'listQuery.pageIndex': function(val, oldVal) {
+        this._query()
+      }
+    },
     methods: {
-      _query(pageIndex) {
-        this.listQuery.pageIndex = pageIndex || this.listQuery.pageIndex
+      _query() {
         this.$http.GET(this.$api.USER, {
           searchText: this.listQuery.searchText,
           pageIndex: this.listQuery.pageIndex,
@@ -122,7 +126,7 @@
         })
       },
       search() {
-        this._query(1)
+        this.listQuery.pageIndex = 1
       },
       sort(col) {
         if (this.listQuery.sortCol === col) {
@@ -131,7 +135,7 @@
           this.listQuery.sortCol = col
           this.listQuery.sortOrder = '+'
         }
-        this._query()
+        this.listQuery.pageIndex = 1
       },
 
       resetCurUser() {
