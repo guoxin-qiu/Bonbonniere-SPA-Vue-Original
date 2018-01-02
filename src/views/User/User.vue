@@ -135,7 +135,7 @@
           this.listQuery.sortCol = col
           this.listQuery.sortOrder = '+'
         }
-        this.listQuery.pageIndex = 1
+        this._query()
       },
 
       resetCurUser() {
