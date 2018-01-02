@@ -3,7 +3,8 @@ import stores from '../store/index'
 import Qs from 'qs'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.baseURL = 'http://localhost:57014/api/'
+// axios.defaults.baseURL = 'http://localhost:57014/api/'
+axios.defaults.baseURL = 'http://localhost:8098/api/'
 axios.defaults.timeout = 1000 * 15
 axios.defaults.withCredentials = true
 

@@ -63,8 +63,8 @@ export default{
   methods: {
     goto(index) {
       if (index < 1 || index > this.totalPageCount || index === this.curPageIndex) return
-      this.queryFunc(index)
       this.$emit('update:curPageIndex', index)
+      this.queryFunc(index)
     }
   }
 }

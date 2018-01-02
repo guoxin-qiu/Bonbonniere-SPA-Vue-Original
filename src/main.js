@@ -7,6 +7,7 @@ import auth from './utils/auth'
 import stores from './store/index'
 import HTTP from './utils/http'
 import { ApiUrl } from './api/api-url'
+require('lodash')
 require('./mock/index.js')
 
 Vue.config.productionTip = false

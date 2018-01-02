@@ -18,6 +18,7 @@ Mock.onGet(ApiUrl.USER).reply(config => {
   const pageSize = config.params.pageSize
   const sortCol = config.params.sortCol
   const sortOrder = config.params.sortOrder
+  console.log(config)
   let users = linq.from(DB.User.getAll()).where(user => {
     return searchKey === '' ||
       user.username.toLowerCase().indexOf(searchKey) > -1 ||

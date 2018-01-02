@@ -45,7 +45,7 @@
           </tfoot>
         </table>
       </div>
-      <div v-else class="alert">暂无数据！</div>
+      <div v-else class="alert">No matches found.</div>
     </div>
     <my-dialog v-if="dialogVisible" @close="dialogVisible=false">
       <h3 slot="dialog-header">User Information</h3>
