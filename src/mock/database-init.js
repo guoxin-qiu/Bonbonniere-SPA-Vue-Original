@@ -27,7 +27,7 @@ function initUser() {
         username: firstName.toLowerCase() + i,
         fullName: `${firstName} ${Random.last()}`,
         password: md5('admin'),
-        email: `${firstName.toLowerCase()}@sydq.net`
+        email: `${firstName.toLowerCase() + i}@sydq.net`
       }
       users.push(user)
     }
@@ -46,6 +46,10 @@ function initMenu() {
   }, {
     text: 'USER',
     url: '/user',
+    isActive: true
+  }, {
+    text: 'USER2',
+    url: '/user2',
     isActive: true
   }, {
     text: 'API',
