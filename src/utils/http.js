@@ -1,6 +1,8 @@
 import axios from 'axios'
 import stores from '../store/index'
 import Qs from 'qs'
+import router from '../router/index'
+import auth from './auth'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // axios.defaults.baseURL = 'http://localhost:57014/api/'
@@ -23,6 +25,19 @@ axios.interceptors.response.use(response => {
   return response
 }, error => {
   stores.dispatch('hideLoader')
+  if (error.response) {
+    switch (error.response.status) {
+      case 401:
+        stores.state.token = '' // store.commit(types.LOGOUT)
+        auth.removeAuthentication()
+        router.replace({
+          path: '/login',
+          query: {
+            redirect: router.currentRoute.fullPath
+          }
+        })
+    }
+  }
   return Promise.reject(error)
 })
 
