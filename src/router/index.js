@@ -25,6 +25,12 @@ export default new Router({
       meta: { requireAuth: true }
     },
     {
+      path: '/403',
+      name: '403',
+      component: resolve => require(['../views/403.vue'], resolve),
+      meta: { requireAuth: false }
+    },
+    {
       path: '/User',
       name: 'User',
       component: resolve => require(['../views/User/User.vue'], resolve),

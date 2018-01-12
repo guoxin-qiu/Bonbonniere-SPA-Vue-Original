@@ -36,6 +36,15 @@ axios.interceptors.response.use(response => {
             redirect: router.currentRoute.fullPath
           }
         })
+        break
+      case 403:
+        router.replace({
+          path: '/403',
+          query: {
+            path: router.currentRoute.fullPath
+          }
+        })
+        break
     }
   }
   return Promise.reject(error)
