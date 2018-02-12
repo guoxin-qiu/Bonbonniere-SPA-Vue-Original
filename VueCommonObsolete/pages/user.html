@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="../favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" href="../vendor/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../css/site.css">
+    <style>
+        .modal-content {
+            width: 700px;
+        }
+    </style>
+    <title>用户管理 - Bonbonniere</title>
+</head>
+
+<body>
+    <div id="app">
+        <bonbonniere-page>
+            <div slot="page-content">
+                <div class="col-md-4"></div>
+                <div class="input-group col-md-4" style="margin:20px 0;">
+                    <input type="text" v-model="searchTextLive" @keyup.enter="search" class="form-control" placeholder="请输入关键字" />
+                    <span class="input-group-btn">  
+                        <button class="btn btn-info btn-search" @click="search">查找</button> 
+                        <button @click="addUser" class="btn btn-info" style="margin-left:3px;">＋添加</button>
+                    </span>
+                </div>
+                <div class="col-md-4"></div>
+
+                <div v-if="users.length > 0" class="table-responsive col-md-12">
+                    <table class="table table-hover">
+                        <col style="width:30%;" />
+                        <col style="width:30%;" />
+                        <col style="width:30%;" />
+                        <col style="width:10%;" />
+                        <thead>
+                            <th v-for="col in columns" v-text="col"></th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <tr v-for="user in users">
+                                <td v-for="col in columns" v-text="user[col]"></td>
+                                <td>
+                                    <span class="input-group-btn">  
+                                        <button class="btn btn-info" @click="viewUser(user.Id)">查看详情</button>  
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-right">
+                                    <bonbonniere-pagination :cur-page-index.sync="pageIndex" :total-page-count="totalPageCount" :search-method="_query"></bonbonniere-pagination>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div v-else class="alert">暂无数据！</div>
+
+                <bonbonniere-modal v-if="showModal" @close="showModal=false">
+                    <h3 slot="modal-header">用户信息</h3>
+                    <div slot="modal-body">
+                        <div class="form-group" v-for="col in columns">
+                            <label class="control-label" v-text="col+':'"></label>
+                            <input v-if="isNew || (isEditing && col!=='Username')" v-model="curUser[col]" type="text" class="form-control" />
+                            <span v-else v-text="curUser[col]" class="form-control" style="background-color:#eee;"></span>
+                        </div>
+                    </div>
+                    <div slot="modal-footer">
+                        <span class="input-group-btn">  
+                        <button type="button" v-show="!isEditing" @click="editUser" class="btn btn-primary">编辑</button>
+                        <button type="button" v-show="isEditing" @click="saveUser" class="btn btn-primary">保存</button>
+                        <button type="button" v-show="isEditing" @click="cancelEditUser" class="btn btn-primary">取消</button>
+                        <button type="button" v-show="!isEditing" @click="delUser" class="btn btn-primary">删除</button>
+                        </span>
+                    </div>
+                </bonbonniere-modal>
+            </div>
+        </bonbonniere-page>
+    </div>
+    <script data-main="../js/pages/user" src="../vendor/requirejs/dist/require.js"></script>
+</body>
+
+</html>
